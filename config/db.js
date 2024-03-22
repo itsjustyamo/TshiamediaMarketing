@@ -6,12 +6,13 @@ const db = process.env.MONGO_URI;
 const connectDB = async () => {
   try {
     mongoose.set('strictQuery', false);
-    await mongoose.connect(db, {
+    const connection = await mongoose.connect(db, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
 
     console.log('MongoDB Connected...');
+    return connection; // Return the connection instance
   } catch (err) {
     console.error(err.message);
     process.exit(1);
@@ -19,4 +20,3 @@ const connectDB = async () => {
 };
 
 module.exports = connectDB;
-

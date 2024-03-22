@@ -11,9 +11,10 @@ connectDB();
 // Initialize middleware
 app.use(express.json({ extended: false }));
 
-
-//Single endpoint just to test API. Send data to browser
-// app.get('/', (req, res) => res.send('API Running'))
+// Route to test API
+app.get('/', (req, res) => {
+  res.send('API Running');
+});
 
 // Define Routes
 app.use('/api/users', require('./routes/api/users'));
