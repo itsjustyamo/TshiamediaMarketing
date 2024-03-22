@@ -20,16 +20,16 @@ app.use('/api/users', require('./routes/api/users'));
 app.use('/api/auth', require('./routes/api/auth'));
 
 // Routes for Digital Strategy
-app.use('/api/digital-strategy', require('./routes/api/digitalStrategyRoutes'));
+app.use('/collections/digitalStrategyRoutes', require('./routes/collections/digitalStrategyRoutes'));
 
 // Routes for Graphic Design
-app.use('/api/graphic-design', require('./routes/api/graphicDesignRoutes'));
+app.use('/collections/graphicDesignRoutes', require('./routes/collections/graphicDesignRoutes'));
 
 // Routes for Social Media Management
-app.use('/api/social-media-management', require('./routes/api/socialMediaManagementRoutes'));
+app.use('/collections/socialMediaManagementRoutes', require('./routes/collections/socialMediaManagementRoutes'));
 
 // Routes for Web Development
-app.use('/api/web-development', require('./routes/api/webDevelopmentRoutes'));
+app.use('/collections/webDevelopmentRoutes', require('./routes/collections/webDevelopmentRoutes'));
 
 // Environmental Variables
 const PORT = process.env.PORT || 3000;

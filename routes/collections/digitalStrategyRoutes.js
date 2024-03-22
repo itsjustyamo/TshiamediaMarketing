@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { connect } = require('../conn.js');
+// const { connect } = require('../conn.js');
 const { ObjectId } = require('mongodb');
+require('dotenv').config();
 
 router.get('/', async (req, res) => {
     try {

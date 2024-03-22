@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const { connect } = require('../conn.js');
+//const { connect } = require('../conn.js');
 const { ObjectId } = require('mongodb');
+require('dotenv').config();
 
 router.get('/', async (req, res) => {
     try {
         const db = await connect();
-        const collection = db.collection("Web_Development");
+        const collection = db.collection("Social_Media_Management");
         const results = await collection.find({}).toArray();
         res.status(200).send(results);
     } catch (error) {
@@ -18,7 +19,7 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const db = await connect();
-        const collection = db.collection("Web_Development");
+        const collection = db.collection("Social_Media_Management");
         const newData = req.body; 
         await collection.insertOne(newData);
         res.status(201).send("Data added successfully");
@@ -31,7 +32,7 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try {
         const db = await connect();
-        const collection = db.collection("Web_Development");
+        const collection = db.collection("Social_Media_Management");
         const id = req.params.id;
         const updatedData = req.body; 
         await collection.updateOne({ _id: new ObjectId(id)}, { $set: updatedData });
@@ -45,7 +46,7 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     try {
         const db = await connect();
-        const collection = db.collection("Web_Development");
+        const collection = db.collection("Social_Media_Management");
         const id = req.params.id;
         await collection.deleteOne({ _id: new ObjectId(id) });
         res.status(200).send("Data deleted successfully");
