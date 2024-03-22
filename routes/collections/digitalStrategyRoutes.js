@@ -1,28 +1,23 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-// const { connect } = require('../conn.js');
-const { ObjectId } = require('mongodb');
-require('dotenv').config();
+const DigitalStrategy = require('../../schemas/DigitalStrategy');
 
-router.get('/', async (req, res) => {
+//Create route
+router.post('/', async (req, res) => {
     try {
-        const db = await connect();
-        const collection = db.collection("Digital_Strategy");
-        const results = await collection.find({}).toArray();
-        res.status(200).send(results);
+    let newDigitalStrategy = new DigitalStrategy(req.body)
+    await newDigitalStrategy.save()
+    res.json(newDigitalStrategy)
     } catch (error) {
         console.error("Error retrieving data:", error);
         res.status(500).send("Internal Server Error");
     }
 });
 
-router.post('/', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
-        const db = await connect();
-        const collection = db.collection("Digital_Strategy");
-        const newData = req.body; 
-        await collection.insertOne(newData);
-        res.status(201).send("Data added successfully");
+        const allServices = await DigitalStrategy.find({})
+ res.json(allServices)
     } catch (error) {
         console.error("Error adding data:", error);
         res.status(500).send("Internal Server Error");
@@ -31,11 +26,11 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
     try {
-        const db = await connect();
-        const collection = db.collection("Digital_Strategy");
+        const db = await connectDB();
+        const DigitalStrategy = db.model('Digital_Strategy');
         const id = req.params.id;
-        const updatedData = req.body; 
-        await collection.updateOne({ _id: new ObjectId(id)}, { $set: updatedData });
+        const updatedData = req.body;
+        await DigitalStrategy.findByIdAndUpdate(id, updatedData);
         res.status(200).send("Data updated successfully");
     } catch (error) {
         console.error("Error updating data:", error);
@@ -45,10 +40,10 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     try {
-        const db = await connect();
-        const collection = db.collection("Digital_Strategy");
+        const db = await connectDB();
+        const DigitalStrategy = db.model('Digital_Strategy');
         const id = req.params.id;
-        await collection.deleteOne({ _id: new ObjectId(id) });
+        await DigitalStrategy.findByIdAndDelete(id);
         res.status(200).send("Data deleted successfully");
     } catch (error) {
         console.error("Error deleting data:", error);
@@ -57,3 +52,4 @@ router.delete('/:id', async (req, res) => {
 });
 
 module.exports = router;
+

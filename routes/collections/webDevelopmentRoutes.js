@@ -1,12 +1,13 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-//const { connect } = require('../conn.js');
+const connectDB = require('../../config/db');
+const WebDevelopment = require('../../schemas/WebDevelopment'); 
 const { ObjectId } = require('mongodb');
 require('dotenv').config();
 
 router.get('/', async (req, res) => {
     try {
-        const db = await connect();
+        const db = await connectDB();
         const collection = db.collection("Web_Development");
         const results = await collection.find({}).toArray();
         res.status(200).send(results);
@@ -18,7 +19,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        const db = await connect();
+        const db = await connectDB();
         const collection = db.collection("Web_Development");
         const newData = req.body; 
         await collection.insertOne(newData);

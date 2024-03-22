@@ -1,15 +1,16 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-//const { connect } = require('../conn.js');
+const connectDB = require('../../config/db');
+const SocialMediaManagement = require('../../schemas/SocialMediaManagement');
 const { ObjectId } = require('mongodb');
 require('dotenv').config();
 
 router.get('/', async (req, res) => {
     try {
-        const db = await connect();
+        const db = await connectDB(); 
         const collection = db.collection("Social_Media_Management");
         const results = await collection.find({}).toArray();
-        res.status(200).send(results);
+        res.status(200).json(results);
     } catch (error) {
         console.error("Error retrieving data:", error);
         res.status(500).send("Internal Server Error");
@@ -18,9 +19,9 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        const db = await connect();
+        const db = await connectDB(); 
         const collection = db.collection("Social_Media_Management");
-        const newData = req.body; 
+        const newData = req.body;
         await collection.insertOne(newData);
         res.status(201).send("Data added successfully");
     } catch (error) {
@@ -31,11 +32,11 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
     try {
-        const db = await connect();
+        const db = await connectDB(); // Use the connectDB function to establish a connection
         const collection = db.collection("Social_Media_Management");
         const id = req.params.id;
-        const updatedData = req.body; 
-        await collection.updateOne({ _id: new ObjectId(id)}, { $set: updatedData });
+        const updatedData = req.body;
+        await collection.updateOne({ _id: new ObjectId(id) }, { $set: updatedData });
         res.status(200).send("Data updated successfully");
     } catch (error) {
         console.error("Error updating data:", error);
@@ -45,7 +46,7 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     try {
-        const db = await connect();
+        const db = await connectDB(); // Use the connectDB function to establish a connection
         const collection = db.collection("Social_Media_Management");
         const id = req.params.id;
         await collection.deleteOne({ _id: new ObjectId(id) });
@@ -56,4 +57,4 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-module.exports = router; 
+module.exports = router;
