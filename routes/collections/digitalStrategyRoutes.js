@@ -14,6 +14,7 @@ router.post('/', async (req, res) => {
     }
 });
 
+//Read route
 router.get('/', async (req, res) => {
     try {
         const allServices = await DigitalStrategy.find({})
@@ -24,32 +25,33 @@ router.get('/', async (req, res) => {
     }
 });
 
+
+//Update route
 router.put('/:id', async (req, res) => {
     try {
-        const db = await connectDB();
-        const DigitalStrategy = db.model('Digital_Strategy');
-        const id = req.params.id;
-        const updatedData = req.body;
-        await DigitalStrategy.findByIdAndUpdate(id, updatedData);
-        res.status(200).send("Data updated successfully");
-    } catch (error) {
+        const updatedDigitalStrategy = await DigitalStrategy.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+
+        );
+        res.send(updatedDigitalStrategy)
+        } catch (error) {
         console.error("Error updating data:", error);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json("Internal Server Error");
     }
 });
 
-router.delete('/:id', async (req, res) => {
-    try {
-        const db = await connectDB();
-        const DigitalStrategy = db.model('Digital_Strategy');
-        const id = req.params.id;
-        await DigitalStrategy.findByIdAndDelete(id);
-        res.status(200).send("Data deleted successfully");
-    } catch (error) {
-        console.error("Error deleting data:", error);
-        res.status(500).send("Internal Server Error");
-    }
-});
+//Delete route
+router.delete('/:id', async (req, res)=>{
+       try {
+       res.status(200).json({ msg: 'Digital Strategy Deleted'})
+
+       } catch (error) {
+        console.error(error)
+         res.status(500).json({msg: "Server Error"})
+     }
+    })
 
 module.exports = router;
 

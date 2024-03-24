@@ -1,60 +1,55 @@
 const express = require('express');
 const router = express.Router();
-const connectDB = require('../../config/db');
-const WebDevelopment = require('../../schemas/WebDevelopment'); 
-const { ObjectId } = require('mongodb');
-require('dotenv').config();
-
-router.get('/', async (req, res) => {
+const WebDevelopment = require('../../schemas/WebDevelopment');
+//Create route
+router.post('/', async (req, res) => {
     try {
-        const db = await connectDB();
-        const collection = db.collection("Web_Development");
-        const results = await collection.find({}).toArray();
-        res.status(200).send(results);
+    let newWebDevelopment = new WebDevelopment(req.body)
+    await newWebDevelopment.save()
+    res.json(newWebDevelopment)
     } catch (error) {
         console.error("Error retrieving data:", error);
         res.status(500).send("Internal Server Error");
     }
 });
 
-router.post('/', async (req, res) => {
+//Read route
+router.get('/', async (req, res) => {
     try {
-        const db = await connectDB();
-        const collection = db.collection("Web_Development");
-        const newData = req.body; 
-        await collection.insertOne(newData);
-        res.status(201).send("Data added successfully");
+        const allServices = await WebDevelopment.find({})
+ res.json(allServices)
     } catch (error) {
         console.error("Error adding data:", error);
         res.status(500).send("Internal Server Error");
     }
 });
 
+
+//Update route
 router.put('/:id', async (req, res) => {
     try {
-        const db = await connect();
-        const collection = db.collection("Web_Development");
-        const id = req.params.id;
-        const updatedData = req.body; 
-        await collection.updateOne({ _id: new ObjectId(id)}, { $set: updatedData });
-        res.status(200).send("Data updated successfully");
-    } catch (error) {
+        const updatedWebDevelopment = await WebDevelopment.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+
+        );
+        res.send(updatedWebDevelopment)
+        } catch (error) {
         console.error("Error updating data:", error);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json("Internal Server Error");
     }
 });
 
-router.delete('/:id', async (req, res) => {
-    try {
-        const db = await connect();
-        const collection = db.collection("Web_Development");
-        const id = req.params.id;
-        await collection.deleteOne({ _id: new ObjectId(id) });
-        res.status(200).send("Data deleted successfully");
-    } catch (error) {
-        console.error("Error deleting data:", error);
-        res.status(500).send("Internal Server Error");
-    }
-});
+//Delete route
+router.delete('/:id', async (req, res)=>{
+       try {
+       res.status(200).json({ msg: 'Digital Strategy Deleted'})
 
-module.exports = router; 
+       } catch (error) {
+        console.error(error)
+         res.status(500).json({msg: "Server Error"})
+     }
+    })
+
+module.exports = router;

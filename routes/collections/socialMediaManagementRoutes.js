@@ -1,60 +1,56 @@
 const express = require('express');
 const router = express.Router();
-const connectDB = require('../../config/db');
 const SocialMediaManagement = require('../../schemas/SocialMediaManagement');
-const { ObjectId } = require('mongodb');
-require('dotenv').config();
 
-router.get('/', async (req, res) => {
+//Create route
+router.post('/', async (req, res) => {
     try {
-        const db = await connectDB(); 
-        const collection = db.collection("Social_Media_Management");
-        const results = await collection.find({}).toArray();
-        res.status(200).json(results);
+    let newSocialMediaManagement = new SocialMediaManagement(req.body)
+    await newSocialMediaManagement.save()
+    res.json(newSocialMediaManagement)
     } catch (error) {
         console.error("Error retrieving data:", error);
         res.status(500).send("Internal Server Error");
     }
 });
 
-router.post('/', async (req, res) => {
+//Read route
+router.get('/', async (req, res) => {
     try {
-        const db = await connectDB(); 
-        const collection = db.collection("Social_Media_Management");
-        const newData = req.body;
-        await collection.insertOne(newData);
-        res.status(201).send("Data added successfully");
+        const allServices = await SocialMediaManagement.find({})
+ res.json(allServices)
     } catch (error) {
         console.error("Error adding data:", error);
         res.status(500).send("Internal Server Error");
     }
 });
 
+
+//Update route
 router.put('/:id', async (req, res) => {
     try {
-        const db = await connectDB(); // Use the connectDB function to establish a connection
-        const collection = db.collection("Social_Media_Management");
-        const id = req.params.id;
-        const updatedData = req.body;
-        await collection.updateOne({ _id: new ObjectId(id) }, { $set: updatedData });
-        res.status(200).send("Data updated successfully");
-    } catch (error) {
+        const updatedSocialMediaManagement = await SocialMediaManagement.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+
+        );
+        res.send(updatedSocialMediaManagement)
+        } catch (error) {
         console.error("Error updating data:", error);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json("Internal Server Error");
     }
 });
 
-router.delete('/:id', async (req, res) => {
-    try {
-        const db = await connectDB(); // Use the connectDB function to establish a connection
-        const collection = db.collection("Social_Media_Management");
-        const id = req.params.id;
-        await collection.deleteOne({ _id: new ObjectId(id) });
-        res.status(200).send("Data deleted successfully");
-    } catch (error) {
-        console.error("Error deleting data:", error);
-        res.status(500).send("Internal Server Error");
-    }
-});
+//Delete route
+router.delete('/:id', async (req, res)=>{
+       try {
+       res.status(200).json({ msg: 'Digital Strategy Deleted'})
+
+       } catch (error) {
+        console.error(error)
+         res.status(500).json({msg: "Server Error"})
+     }
+    })
 
 module.exports = router;
