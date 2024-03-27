@@ -17,7 +17,8 @@ router.post('/', async (req, res) => {
 //Read route
 router.get('/', async (req, res) => {
     try {
-        const allServices = await DigitalStrategy.find({})
+        const allServices = await DigitalStrategy.find()
+        console.log(allServices)
  res.json(allServices)
     } catch (error) {
         console.error("Error adding data:", error);

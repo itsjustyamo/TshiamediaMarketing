@@ -1,6 +1,7 @@
 const express = require('express');
 const connectDB = require('./config/db');
 require('dotenv').config();
+const cors = require('cors');
 
 // Initialize our app variable with Express
 const app = express();
@@ -9,6 +10,7 @@ const app = express();
 connectDB();
 
 // Initialize middleware
+app.use(cors());
 app.use(express.json({ extended: false }));
 
 // Route to test API
