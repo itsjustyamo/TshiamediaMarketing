@@ -15,8 +15,6 @@ Tshiamedia Marketing Backend is built using Node.js and Express.js. It serves as
 - Express.js: A web application framework for Node.js.
 - MongoDB: A NoSQL database for storing and managing data.
 
-## External API Integration
-- [Twitter API](https://rapidapi.com/alexanderxbx/api/twitter): Used for fetching tweets and integrating Twitter content into the website.
 
 ## Difficulties Faced
 - Ensuring all routes worked: It was challenging to ensure that all the routes in the backend were correctly implemented and functioning as expected. Debugging and testing each route thoroughly required careful attention to detail.
